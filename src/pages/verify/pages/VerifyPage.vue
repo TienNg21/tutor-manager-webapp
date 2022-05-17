@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { verify } from '@/common/service/app.service';
+import { appModule } from '@/plugins/vuex/appModule';
 import { ElMessage } from 'element-plus';
 import { Options, Vue } from 'vue-class-component';
 
@@ -21,6 +22,9 @@ export default class VerifyPage extends Vue {
                     type: 'success',
                     message: `Verify email successfully.`,
                 });
+                const tutor = appModule.loginCustomer;
+                tutor.verified = true;
+                appModule.setLoginCustomer(tutor);
                 this.$router.push('/');
             } else {
                 ElMessage({
