@@ -4,6 +4,8 @@ import HomePage from '@/pages/home/pages/HomePage.vue';
 import LoginPage from '@/pages/login/pages/LoginPage.vue';
 import RegisterPage from '@/pages/register/pages/RegisterPage.vue';
 import SearchPage from '@/pages/search/pages/SearchPage.vue'
+import AccountPage from '@/pages/account/pages/AccountPage.vue'
+import VerifyPage from '@/pages/verify/pages/VerifyPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,6 +27,14 @@ const routes: Array<RouteRecordRaw> = [
       path: '/search',
       name: 'SearchPage',
       component: SearchPage,
+    }, {
+      path: '/account',
+      name: 'AccountPage',
+      component: AccountPage,
+    }, {
+      path: '/verify/:id/:uniqueString',
+      name: 'VerifyPage',
+      component: VerifyPage,
     }],
   },
 ];

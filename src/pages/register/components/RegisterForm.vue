@@ -1,69 +1,131 @@
 <template>
     <div class="register-form container">
-        <el-form :model="form" label-position="top" label-width="120px">
-            <el-form-item label="Email">
-                <el-input v-model="form.email" />
+        <el-form v-if="!error" :model="form" label-position="top" label-width="120px">
+            <div class="row">
+                <div class="col-6">
+                    <el-form-item label="Email">
+                        <el-input v-model="form.email" />
+                    </el-form-item>
+                </div>
+                <div class="col-6">
+                    <el-form-item label="Name">
+                        <el-input v-model="form.name" />
+                    </el-form-item>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8">
+                    <el-form-item label="Citizen Identification">
+                        <el-input type="text" v-model="form.citizenIdentification" />
+                    </el-form-item>
+                </div>
+                <div class="col-4">
+                    <el-form-item label="Phone Number">
+                        <el-input type="text" v-model="form.phoneNumber" />
+                    </el-form-item>
+                </div>
+            </div>
+            <el-form-item label="Address">
+                <el-input type="text" v-model="form.address" />
             </el-form-item>
-            <el-form-item label="Name">
-                <el-input v-model="form.name" />
+            <el-form-item label="Gender">
+                <div>
+                    <el-radio v-model="form.gender" :label="true" size="large"
+                        >Man</el-radio
+                    >
+                    <el-radio v-model="form.gender" :label="false" size="large"
+                        >Woman</el-radio
+                    >
+                </div>
             </el-form-item>
             <el-form-item label="Password">
                 <el-input type="password" :show-password="true" v-model="form.password" />
             </el-form-item>
             <el-form-item label="Retype Password">
-                <el-input type="password" :show-password="true" v-model="form.password" />
+                <el-input
+                    type="password"
+                    :show-password="true"
+                    v-model="reTypePassword"
+                />
             </el-form-item>
-            <div class="row">
-                <div class="col-4">
-                    <el-form-item label="Province" prop="region">
-                        <el-select v-model="form.province" placeholder="Activity zone">
-                            <el-option label="Zone one" value="2" />
-                            <el-option label="Zone two" value="1" />
-                        </el-select>
-                    </el-form-item>
-                </div>
-                <div class="col-4">
-                    <el-form-item label="District" prop="region">
-                        <el-select v-model="form.district" placeholder="Activity zone">
-                            <el-option label="Zone one" value="2" />
-                            <el-option label="Zone two" value="1" />
-                        </el-select>
-                    </el-form-item>
-                </div>
-                <div class="col-4">
-                    <el-form-item label="Ward" prop="region">
-                        <el-select v-model="form.ward" placeholder="Activity zone">
-                            <el-option label="Zone one" value="1" />
-                            <el-option label="Zone two" value="2" />
-                        </el-select>
-                    </el-form-item>
-                </div>
-                <el-form-item class="register-button">
-                    <el-button type="primary" @click="onSubmit">Register</el-button>
-                </el-form-item>
-            </div>
+            <el-form-item class="register-button">
+                <el-button type="primary" @click="onSubmit">Register</el-button>
+            </el-form-item>
         </el-form>
+        <el-result
+            v-else
+            icon="error"
+            title="Something went wrong!"
+            sub-title="Please try again."
+        >
+            <template #extra>
+                <el-button type="primary" @click="returnRegisterPage">Back</el-button>
+            </template>
+        </el-result>
+        <div v-if="loading">Loading ...</div>
     </div>
 </template>
 <script lang="ts">
 import { IRegisterForm } from '@/common/interfaces';
+import { register } from '@/common/service/app.service';
+import { ElMessage } from 'element-plus';
 import { Options, Vue } from 'vue-class-component';
 @Options({
     components: {},
 })
 export default class registerForm extends Vue {
+    reTypePassword = '';
+    error = false;
+    loading = false;
+
     form: IRegisterForm = {
         name: '',
         email: '',
         password: '',
-        password2: '',
-        province: undefined,
-        district: undefined,
-        ward: undefined,
+        address: '',
         citizenIdentification: '',
         phoneNumber: '',
         gender: undefined,
     };
+
+    async onSubmit() {
+        this.loading = true;
+        console.log(this.form);
+        if (this.reTypePassword !== this.form.password) {
+            ElMessage({
+                type: 'error',
+                message: `Password do not match!`,
+            });
+            this.error = true;
+            this.loading = false;
+            return;
+        }
+
+        const response = await register(this.form);
+
+        console.log(response);
+
+        if (response?.success) {
+            ElMessage({
+                type: 'success',
+                message: `Please check your email.`,
+            });
+            this.$router.push('/login');
+        } else {
+            ElMessage({
+                type: 'error',
+                message: response?.message,
+            });
+            this.error = true;
+        }
+
+        this.loading = false;
+    }
+
+    returnRegisterPage() {
+        this.error = false;
+        this.$router.push('/register');
+    }
 }
 </script>
 <style lang="scss" scoped>

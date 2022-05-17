@@ -1,6 +1,6 @@
 <template>
     <div class="login-form container">
-        <el-form label-position="top" label-width="120px">
+        <el-form label-position="top" label-width="120px" v-if="!error">
             <el-form-item label="Email">
                 <el-input name="email" v-model="form.email" />
             </el-form-item>
@@ -17,10 +17,24 @@
                 <el-button type="primary" @click="submitLoginForm">Login</el-button>
             </el-form-item>
         </el-form>
+        <el-result
+            v-else
+            icon="error"
+            title="Something went wrong!"
+            sub-title="Please try again."
+        >
+            <template #extra>
+                <el-button type="primary" @click="returnLoginPage">Back</el-button>
+            </template>
+        </el-result>
+        <div v-if="loading">Loading ...</div>
     </div>
 </template>
 <script lang="ts">
+import localStorageAuthService from '@/common/authStorage';
 import { login } from '@/common/service/app.service';
+import { appModule } from '@/plugins/vuex/appModule';
+import { ElMessage } from 'element-plus';
 import { Options, setup, Vue } from 'vue-class-component';
 
 @Options({
@@ -31,13 +45,40 @@ export default class LoginForm extends Vue {
         email: '',
         password: '',
     };
+
+    error = false;
+    loading = false;
+
     async submitLoginForm() {
+        this.loading = true;
         const response = await login(this.form);
-        if (response) {
-            this.$router.push('/');
+
+        if (response?.success) {
+            appModule.setLoginCustomer(response?.data?.items?.[0] || {});
+            localStorageAuthService.setJwtToken(response?.data?.jwt || '');
+            localStorageAuthService.setLoginTutor(response?.data?.tutor || {});
+            appModule.setLoginCustomer(response?.data?.tutor);
+
+            if (appModule.isCustomerLogin) {
+                ElMessage({
+                    type: 'success',
+                    message: `You have successfully logged in to your account.`,
+                });
+                this.$router.push('/');
+            }
         } else {
-            console.log('error');
+            ElMessage({
+                type: 'error',
+                message: response.message,
+            });
+            this.error = true;
         }
+        this.loading = false;
+    }
+
+    returnLoginPage() {
+        this.error = false;
+        this.$router.push('/login');
     }
 }
 </script>
