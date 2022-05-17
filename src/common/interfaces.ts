@@ -21,6 +21,7 @@ export interface ICustomer {
     address?: string;
     citizenIdentification?: string;
     gender?: boolean;
+    verified?: boolean;
 }
 
 export interface IVerifyParam {

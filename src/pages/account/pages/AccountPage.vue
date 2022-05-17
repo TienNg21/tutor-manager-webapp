@@ -12,6 +12,10 @@
             <el-tag v-if="tutor.gender" size="small">Man</el-tag>
             <el-tag v-else size="small">Woman</el-tag>
         </el-descriptions-item>
+        <el-descriptions-item label="Verify">
+            <el-tag v-if="tutor.verified" size="small">Verified</el-tag>
+            <el-tag v-else size="small">Unverified</el-tag>
+        </el-descriptions-item>
         <el-descriptions-item label="Address">{{ tutor.address }}</el-descriptions-item>
     </el-descriptions>
 </template>
