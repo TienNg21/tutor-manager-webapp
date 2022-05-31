@@ -86,11 +86,13 @@ export default class registerForm extends Vue {
         citizenIdentification: '',
         phoneNumber: '',
         gender: undefined,
+        provinceId: 1,
+        districtId: 1,
+        wardId: 1,
     };
 
     async onSubmit() {
         this.loading = true;
-        console.log(this.form);
         if (this.reTypePassword !== this.form.password) {
             ElMessage({
                 type: 'error',

@@ -11,6 +11,9 @@ export interface IRegisterForm {
     phoneNumber: string,
     gender: boolean | undefined,
     address: string,
+    provinceId: number,
+    districtId: number,
+    wardId: number
 }
 
 export interface ICustomer {

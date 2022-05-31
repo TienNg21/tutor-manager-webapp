@@ -8,7 +8,7 @@ const axiosClient = axios.create({
 
 export async function login(form: ILoginForm) {
     try {
-        const { data } = await axiosClient.post(`/api/tutors/login`, form);
+        const { data } = await axiosClient.post(`/api/tutors/auth/login`, form);
         return data;
     } catch (error) {
         console.log(error);
@@ -17,7 +17,7 @@ export async function login(form: ILoginForm) {
 
 export async function register(form: IRegisterForm) {
     try {
-        const { data } = await axiosClient.post(`/api/tutors/register`, form);
+        const { data } = await axiosClient.post(`/api/tutors/auth/register`, form);
         return data;
     } catch (error) {
         console.log(error);
@@ -27,7 +27,7 @@ export async function register(form: IRegisterForm) {
 
 export async function verify(params: IVerifyParam) {
     try {
-        const { data } = await axiosClient.get(`/api/tutors/verify/${params.id}/${params.uniqueString}`);
+        const { data } = await axiosClient.post(`/api/tutors/auth/verify/${params.id}/${params.uniqueString}`);
         return data;
     } catch (error) {
         console.log(error);
