@@ -53,7 +53,7 @@ export default class LoginForm extends Vue {
         this.loading = true;
         const response = await login(this.form);
 
-        if (response?.success) {
+        if (response?.code == 200) {
             appModule.setLoginCustomer(response?.data?.items?.[0] || {});
             localStorageAuthService.setJwtToken(response?.data?.jwt || '');
             localStorageAuthService.setLoginTutor(response?.data?.tutor || {});

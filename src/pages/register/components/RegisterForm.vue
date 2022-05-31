@@ -107,7 +107,7 @@ export default class registerForm extends Vue {
 
         console.log(response);
 
-        if (response?.success) {
+        if (response?.code == 200) {
             ElMessage({
                 type: 'success',
                 message: `Please check your email.`,
