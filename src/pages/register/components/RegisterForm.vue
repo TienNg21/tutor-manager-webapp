@@ -26,6 +26,42 @@
                 </div>
             </div>
             <el-form-item label="Address">
+                <div class="row">
+                    <div class="col-4">
+                        <el-select
+                            v-model="form.provinceId"
+                            filterable
+                            placeholder="Province"
+                        >
+                            <el-option
+                                v-for="province in provinceList"
+                                :key="province.id"
+                                :label="province.name"
+                                :value="province.id"
+                            />
+                        </el-select>
+                    </div>
+                    <div class="col-4">
+                        <el-select v-model="value" filterable placeholder="District">
+                            <el-option
+                                v-for="district in districtList"
+                                :key="district.id"
+                                :label="district.name"
+                                :value="district.id"
+                            />
+                        </el-select>
+                    </div>
+                    <div class="col-4">
+                        <el-select v-model="value" filterable placeholder="Ward">
+                            <el-option
+                                v-for="ward in wardList"
+                                :key="ward.id"
+                                :label="ward.name"
+                                :value="ward.id"
+                            />
+                        </el-select>
+                    </div>
+                </div>
                 <el-input type="text" v-model="form.address" />
             </el-form-item>
             <el-form-item label="Gender">
@@ -70,6 +106,8 @@ import { IRegisterForm } from '@/common/interfaces';
 import { register } from '@/common/service/app.service';
 import { ElMessage } from 'element-plus';
 import { Options, Vue } from 'vue-class-component';
+import { registerModule } from '../store';
+
 @Options({
     components: {},
 })
@@ -77,6 +115,18 @@ export default class registerForm extends Vue {
     reTypePassword = '';
     error = false;
     loading = false;
+
+    loadData() {
+        registerModule.getProvinceList();
+    }
+
+    created() {
+        this.loadData();
+    }
+
+    get provinceList() {
+        return registerModule.provinceList;
+    }
 
     form: IRegisterForm = {
         name: '',

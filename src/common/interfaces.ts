@@ -31,3 +31,18 @@ export interface IVerifyParam {
     id?: number;
     uniqueString?: string;
 }
+
+export interface IProvince {
+    id?: number,
+    name?: string
+}
+
+export interface IDistrict {
+    id?: number,
+    name?: string
+}
+
+export interface IWard {
+    id?: number,
+    name?: string
+}
