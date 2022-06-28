@@ -1,20 +1,27 @@
 <template>
     <div class="login-form container">
         <el-form label-position="top" label-width="120px" v-if="!error">
-            <el-form-item label="Email">
-                <el-input name="email" v-model="form.email" />
+            <el-form-item :label="$t('login.email.label')">
+                <el-input
+                    name="email"
+                    v-model="form.email"
+                    :placeholder="$t('login.email.placeholder')"
+                />
             </el-form-item>
-            <el-form-item label="Password">
+            <el-form-item :label="$t('login.password.label')">
                 <el-input
                     type="password"
                     :show-password="true"
                     name="password"
                     v-model="form.password"
+                    :placeholder="$t('login.password.placeholder')"
                 />
             </el-form-item>
 
             <el-form-item class="login-button">
-                <el-button type="primary" @click="submitLoginForm">Login</el-button>
+                <el-button type="primary" @click="submitLoginForm">{{
+                    $t('login.button.label')
+                }}</el-button>
             </el-form-item>
         </el-form>
         <el-result
@@ -27,7 +34,6 @@
                 <el-button type="primary" @click="returnLoginPage">Back</el-button>
             </template>
         </el-result>
-        <div v-if="loading">Loading ...</div>
     </div>
 </template>
 <script lang="ts">
@@ -36,6 +42,7 @@ import { login } from '@/common/service/app.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import { ElMessage } from 'element-plus';
 import { Options, setup, Vue } from 'vue-class-component';
+import { ElLoading } from 'element-plus';
 
 @Options({
     components: {},
@@ -47,19 +54,22 @@ export default class LoginForm extends Vue {
     };
 
     error = false;
-    loading = false;
 
     async submitLoginForm() {
-        this.loading = true;
+        const loading = ElLoading.service({
+            lock: true,
+            text: 'Loading',
+        });
         const response = await login(this.form);
+        loading.close();
 
         if (response?.code == 200) {
-            appModule.setLoginCustomer(response?.data?.items?.[0] || {});
-            localStorageAuthService.setJwtToken(response?.data?.jwt || '');
-            localStorageAuthService.setLoginTutor(response?.data?.tutor || {});
-            appModule.setLoginCustomer(response?.data?.tutor);
+            appModule.setLoginUser(response?.data?.items?.[0] || {});
+            localStorageAuthService.setJwtToken(response?.jwt || '');
+            localStorageAuthService.setLoginTutor(response?.data || {});
+            appModule.setLoginUser(response?.data);
 
-            if (appModule.isCustomerLogin) {
+            if (appModule.isUserLogin) {
                 ElMessage({
                     type: 'success',
                     message: `You have successfully logged in to your account.`,
@@ -73,7 +83,6 @@ export default class LoginForm extends Vue {
             });
             this.error = true;
         }
-        this.loading = false;
     }
 
     returnLoginPage() {

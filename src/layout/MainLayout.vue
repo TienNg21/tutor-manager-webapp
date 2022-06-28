@@ -1,16 +1,11 @@
 <template>
     <div class="main-layout">
-        <el-container>
-            <el-header>
-                <MainHeader />
-            </el-header>
-            <el-main>
-                <router-view />
-            </el-main>
-            <!-- <el-footer>
-                <MainFooter />
-            </el-footer> -->
-        </el-container>
+        <MainHeader />
+        <div class="container">
+            <router-view />
+        </div>
+
+        <!-- <MainFooter /> -->
     </div>
 </template>
 <script lang="ts">
@@ -28,10 +23,7 @@ export default class MainLayout extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-:deep(.el-header) {
-    padding: 0;
-}
-:deep(.el-footer) {
-    padding: 0;
+.container {
+    margin-top: 30px;
 }
 </style>

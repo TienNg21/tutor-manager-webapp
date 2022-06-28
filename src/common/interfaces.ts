@@ -11,12 +11,12 @@ export interface IRegisterForm {
     phoneNumber: string,
     gender: boolean | undefined,
     address: string,
-    provinceId: number,
-    districtId: number,
-    wardId: number
+    provinceId: number | undefined,
+    districtId: number | undefined,
+    wardId: number | undefined
 }
 
-export interface ICustomer {
+export interface IUser {
     id?: number;
     name?: string;
     email?: string;

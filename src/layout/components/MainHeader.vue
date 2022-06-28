@@ -1,17 +1,50 @@
 <template>
     <div class="header">
-        <div class="left-wrapper">
-            <router-link to="/">Home</router-link>
-            <router-link to="/search">Search</router-link>
-        </div>
-        <div class="right-wrapper">
-            <div v-if="!isLoggedIn">
-                <router-link to="/login">Login</router-link>
-                <router-link to="/register">Register</router-link>
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="left-wrapper">
+                <router-link to="/">{{ $t('home.dashBoard') }}</router-link>
+                <router-link class="p-3" to="/search">{{
+                    $t('home.search')
+                }}</router-link>
             </div>
-            <div v-else>
-                <router-link to="/account">Account</router-link>
-                <el-button text @click="logout">Logout</el-button>
+            <div class="right-wrapper">
+                <div v-if="!isLoggedIn">
+                    <el-button round @click="onClickLoginButton">{{
+                        $t('home.login')
+                    }}</el-button>
+                    <el-button round type="primary" @click="onClickRegisterButton">{{
+                        $t('home.register')
+                    }}</el-button>
+                </div>
+                <div v-else>
+                    <el-dropdown>
+                        <span class="el-dropdown-link align-items-center">
+                            {{ $t('home.myAccount') }}
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item>
+                                    <el-button @click="this.$router.push('/account')">{{
+                                        $t('home.myAccount')
+                                    }}</el-button>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <el-button @click="logout">{{
+                                        $t('home.class')
+                                    }}</el-button>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <el-button @click="logout">{{
+                                        $t('home.requiredClass')
+                                    }}</el-button>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
+                                    <el-button plain @click="logout">Logout</el-button>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
             </div>
         </div>
     </div>
@@ -27,7 +60,15 @@ import { Options, Vue } from 'vue-class-component';
 })
 export default class MainHeader extends Vue {
     get isLoggedIn() {
-        return appModule.isCustomerLogin;
+        return appModule.isUserLogin;
+    }
+
+    onClickLoginButton() {
+        this.$router.push('/login');
+    }
+
+    onClickRegisterButton() {
+        this.$router.push('/register');
     }
 
     logout() {
@@ -40,7 +81,7 @@ export default class MainHeader extends Vue {
                         message: `Logout`,
                     });
                     localStorageAuthService.resetAll();
-                    appModule.setLoginCustomer({});
+                    appModule.setLoginUser({});
                     this.$router.push('/');
                 }
             },
@@ -49,19 +90,26 @@ export default class MainHeader extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-a {
-    font-size: 24px;
-    color: $color-white;
-    text-decoration: none;
-    padding: 0 30px;
-}
-.router-link-active.router-link-exact-active {
-    color: $color-black;
-}
 .header {
+    color: $color-white;
+    width: 100%;
+    font-size: 16px;
+    height: 50px;
     background-color: $color-brand;
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
+    a {
+        color: $color-white;
+        text-decoration: none;
+    }
+
+    .container {
+        height: 100%;
+    }
+}
+
+.el-dropdown {
+    height: 24px;
+    color: $color-white;
+    font-size: 16px;
+    align-items: center;
 }
 </style>

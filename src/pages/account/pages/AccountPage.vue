@@ -28,11 +28,11 @@ import { Options, Vue } from 'vue-class-component';
 })
 export default class AccountPage extends Vue {
     get tutor() {
-        return appModule.loginCustomer;
+        return appModule.loginUser;
     }
 
     created() {
-        console.log(appModule.loginCustomer);
+        console.log(appModule.loginUser);
     }
 }
 </script>

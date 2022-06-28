@@ -22,9 +22,9 @@ export default class VerifyPage extends Vue {
                     type: 'success',
                     message: `Verify email successfully.`,
                 });
-                const tutor = appModule.loginCustomer;
+                const tutor = appModule.loginUser;
                 tutor.verified = true;
-                appModule.setLoginCustomer(tutor);
+                appModule.setLoginUser(tutor);
                 this.$router.push('/');
             } else {
                 ElMessage({

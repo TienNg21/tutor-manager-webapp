@@ -1,18 +1,18 @@
-import { ICustomer } from './interfaces';
+import { IUser } from './interfaces';
 import { storage } from './localStorage';
 
 export const enum AUTH_SERVICE_KEY {
     JWT_TOKEN = 'JWT_TOKEN',
-    LOGIN_CUSTOMER = 'CUSTOMER',
+    LOGIN_USER = 'USER',
 }
 class LocalStorageAuthService {
     setJwtToken(value: string) {
         storage.setLocalStorage(AUTH_SERVICE_KEY.JWT_TOKEN, value);
     }
 
-    setLoginTutor(tutor: ICustomer | null) {
+    setLoginTutor(tutor: IUser | null) {
         storage.setLocalStorage(
-            AUTH_SERVICE_KEY.LOGIN_CUSTOMER,
+            AUTH_SERVICE_KEY.LOGIN_USER,
             JSON.stringify(tutor || ''),
         );
     }
@@ -21,8 +21,8 @@ class LocalStorageAuthService {
         return storage.getLocalStorage(AUTH_SERVICE_KEY.JWT_TOKEN);
     }
 
-    getLoginTutor(): ICustomer {
-        return storage.getObjectFromKey(AUTH_SERVICE_KEY.LOGIN_CUSTOMER) as ICustomer;
+    getLoginTutor(): IUser {
+        return storage.getObjectFromKey(AUTH_SERVICE_KEY.LOGIN_USER) as IUser;
     }
 
     resetJwtToken() {

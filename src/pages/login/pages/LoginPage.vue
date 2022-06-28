@@ -1,8 +1,8 @@
 <template>
-    <div class="container">
-        <h1>Login</h1>
+    <el-card class="box-card">
+        <h1>{{ $t('login.title') }}</h1>
         <LoginForm />
-    </div>
+    </el-card>
 </template>
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
@@ -17,5 +17,9 @@ export default class LoginPage extends Vue {}
 <style lang="scss" scoped>
 h1 {
     text-align: center;
+}
+
+.box-card {
+    margin-top: 30px;
 }
 </style>

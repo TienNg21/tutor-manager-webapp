@@ -3,35 +3,52 @@
         <el-form v-if="!error" :model="form" label-position="top" label-width="120px">
             <div class="row">
                 <div class="col-6">
-                    <el-form-item label="Email">
-                        <el-input v-model="form.email" />
+                    <el-form-item :label="$t('register.email.label')">
+                        <el-input
+                            :placeholder="$t('register.email.placeholder')"
+                            v-model="form.email"
+                        />
                     </el-form-item>
                 </div>
                 <div class="col-6">
-                    <el-form-item label="Name">
-                        <el-input v-model="form.name" />
+                    <el-form-item :label="$t('register.name.label')">
+                        <el-input
+                            :placeholder="$t('register.name.placeholder')"
+                            v-model="form.name"
+                        />
                     </el-form-item>
                 </div>
             </div>
             <div class="row">
                 <div class="col-8">
-                    <el-form-item label="Citizen Identification">
-                        <el-input type="text" v-model="form.citizenIdentification" />
+                    <el-form-item :label="$t('register.citizenIdentification.label')">
+                        <el-input
+                            type="text"
+                            :placeholder="
+                                $t('register.citizenIdentification.placeholder')
+                            "
+                            v-model="form.citizenIdentification"
+                        />
                     </el-form-item>
                 </div>
                 <div class="col-4">
-                    <el-form-item label="Phone Number">
-                        <el-input type="text" v-model="form.phoneNumber" />
+                    <el-form-item :label="$t('register.phoneNumber.label')">
+                        <el-input
+                            type="text"
+                            :placeholder="$t('register.phoneNumber.placeholder')"
+                            v-model="form.phoneNumber"
+                        />
                     </el-form-item>
                 </div>
             </div>
-            <el-form-item label="Address">
+            <el-form-item :label="$t('register.address.label')">
                 <div class="row">
                     <div class="col-4">
                         <el-select
                             v-model="form.provinceId"
                             filterable
-                            placeholder="Province"
+                            :placeholder="$t('register.address.province')"
+                            @change="onChangeProvince"
                         >
                             <el-option
                                 v-for="province in provinceList"
@@ -42,7 +59,12 @@
                         </el-select>
                     </div>
                     <div class="col-4">
-                        <el-select v-model="value" filterable placeholder="District">
+                        <el-select
+                            v-model="form.districtId"
+                            filterable
+                            :placeholder="$t('register.address.district')"
+                            @change="onChangeDistrict"
+                        >
                             <el-option
                                 v-for="district in districtList"
                                 :key="district.id"
@@ -52,7 +74,11 @@
                         </el-select>
                     </div>
                     <div class="col-4">
-                        <el-select v-model="value" filterable placeholder="Ward">
+                        <el-select
+                            v-model="form.wardId"
+                            :placeholder="$t('register.address.ward')"
+                            filterable
+                        >
                             <el-option
                                 v-for="ward in wardList"
                                 :key="ward.id"
@@ -62,9 +88,14 @@
                         </el-select>
                     </div>
                 </div>
-                <el-input type="text" v-model="form.address" />
+                <el-input
+                    type="text"
+                    v-model="form.address"
+                    class="address-detail"
+                    :placeholder="$t('register.address.address')"
+                />
             </el-form-item>
-            <el-form-item label="Gender">
+            <el-form-item :label="$t('register.gender.label')">
                 <div>
                     <el-radio v-model="form.gender" :label="true" size="large"
                         >Man</el-radio
@@ -74,31 +105,40 @@
                     >
                 </div>
             </el-form-item>
-            <el-form-item label="Password">
-                <el-input type="password" :show-password="true" v-model="form.password" />
-            </el-form-item>
-            <el-form-item label="Retype Password">
+            <el-form-item :label="$t('register.password.label')">
                 <el-input
                     type="password"
+                    :placeholder="$t('register.password.placeholder')"
+                    :show-password="true"
+                    v-model="form.password"
+                />
+            </el-form-item>
+            <el-form-item :label="$t('register.confirmPassword.label')">
+                <el-input
+                    type="password"
+                    :placeholder="$t('register.confirmPassword.placeholder')"
                     :show-password="true"
                     v-model="reTypePassword"
                 />
             </el-form-item>
             <el-form-item class="register-button">
-                <el-button type="primary" @click="onSubmit">Register</el-button>
+                <el-button type="primary" @click="onSubmit">{{
+                    $t('register.button.label')
+                }}</el-button>
             </el-form-item>
         </el-form>
         <el-result
             v-else
             icon="error"
-            title="Something went wrong!"
-            sub-title="Please try again."
+            :title="$t('register.error.title')"
+            :sub-title="$t('register.error.subTitle')"
         >
             <template #extra>
-                <el-button type="primary" @click="returnRegisterPage">Back</el-button>
+                <el-button type="primary" @click="returnRegisterPage">{{
+                    $t('register.error.back')
+                }}</el-button>
             </template>
         </el-result>
-        <div v-if="loading">Loading ...</div>
     </div>
 </template>
 <script lang="ts">
@@ -107,6 +147,7 @@ import { register } from '@/common/service/app.service';
 import { ElMessage } from 'element-plus';
 import { Options, Vue } from 'vue-class-component';
 import { registerModule } from '../store';
+import { ElLoading } from 'element-plus';
 
 @Options({
     components: {},
@@ -114,7 +155,6 @@ import { registerModule } from '../store';
 export default class registerForm extends Vue {
     reTypePassword = '';
     error = false;
-    loading = false;
 
     loadData() {
         registerModule.getProvinceList();
@@ -128,6 +168,22 @@ export default class registerForm extends Vue {
         return registerModule.provinceList;
     }
 
+    get districtList() {
+        return registerModule.districtList;
+    }
+
+    get wardList() {
+        return registerModule.wardList;
+    }
+
+    onChangeProvince(value: number) {
+        registerModule.getDistrictById(value);
+    }
+
+    onChangeDistrict(value: number) {
+        registerModule.getWardById(value);
+    }
+
     form: IRegisterForm = {
         name: '',
         email: '',
@@ -136,31 +192,30 @@ export default class registerForm extends Vue {
         citizenIdentification: '',
         phoneNumber: '',
         gender: undefined,
-        provinceId: 1,
-        districtId: 1,
-        wardId: 1,
+        provinceId: undefined,
+        districtId: undefined,
+        wardId: undefined,
     };
 
     async onSubmit() {
-        this.loading = true;
         if (this.reTypePassword !== this.form.password) {
             ElMessage({
                 type: 'error',
-                message: `Password do not match!`,
+                message: this.$t('register.error.passwordNotMatch'),
             });
             this.error = true;
-            this.loading = false;
             return;
         }
-
+        const loading = ElLoading.service({
+            lock: true,
+            text: this.$t('register.message.loading'),
+        });
         const response = await register(this.form);
-
-        console.log(response);
-
+        loading.close();
         if (response?.code == 200) {
             ElMessage({
                 type: 'success',
-                message: `Please check your email.`,
+                message: this.$t('register.message.checkEmail'),
             });
             this.$router.push('/login');
         } else {
@@ -170,8 +225,6 @@ export default class registerForm extends Vue {
             });
             this.error = true;
         }
-
-        this.loading = false;
     }
 
     returnRegisterPage() {
@@ -182,7 +235,15 @@ export default class registerForm extends Vue {
 </script>
 <style lang="scss" scoped>
 .register-form {
-    max-width: 500px;
+    max-width: 600px;
+}
+
+.address-detail {
+    margin-top: 10px;
+}
+
+:deep(.el-form-item__label) {
+    font-weight: 600;
 }
 
 ::v-deep .register-button .el-form-item__content {

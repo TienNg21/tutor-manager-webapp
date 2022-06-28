@@ -1,7 +1,7 @@
 import store from '@/plugins/vuex';
 import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import { isEmpty } from 'lodash';
-import { ICustomer } from '@/common/interfaces';
+import { IUser } from '@/common/interfaces';
 
 @Module({
     name: 'app',
@@ -11,20 +11,20 @@ import { ICustomer } from '@/common/interfaces';
     store,
 })
 class AppModule extends VuexModule {
-    loginCustomer: ICustomer = {} as ICustomer;
+    loginUser: IUser = {} as IUser;
 
-    get isCustomerLogin() {
-        return !isEmpty(this.loginCustomer);
+    get isUserLogin() {
+        return !isEmpty(this.loginUser);
     }
 
     @Action
-    setLoginCustomer(customer: ICustomer) {
-        this.SET_LOGIN_CUSTOMER(customer);
+    setLoginUser(user: IUser) {
+        this.SET_LOGIN_USER(user);
     }
 
     @Mutation
-    SET_LOGIN_CUSTOMER(customer: ICustomer) {
-        this.loginCustomer = customer;
+    SET_LOGIN_USER(user: IUser) {
+        this.loginUser = user;
     }
 }
 
