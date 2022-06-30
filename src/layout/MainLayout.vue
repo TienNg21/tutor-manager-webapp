@@ -4,8 +4,6 @@
         <div class="container">
             <router-view />
         </div>
-
-        <!-- <MainFooter /> -->
     </div>
 </template>
 <script lang="ts">
