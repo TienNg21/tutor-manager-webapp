@@ -58,7 +58,7 @@ export default class LoginForm extends Vue {
     async submitLoginForm() {
         const loading = ElLoading.service({
             lock: true,
-            text: 'Loading',
+            text: this.$t('login.loading'),
         });
         const response = await login(this.form);
         loading.close();
@@ -72,7 +72,7 @@ export default class LoginForm extends Vue {
             if (appModule.isUserLogin) {
                 ElMessage({
                     type: 'success',
-                    message: `You have successfully logged in to your account.`,
+                    message: this.$t('login.message.success'),
                 });
                 this.$router.push('/');
             }

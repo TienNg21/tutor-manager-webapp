@@ -1,3 +1,6 @@
+import { number } from "@intlify/core-base";
+import { string } from "yup";
+
 export interface ILoginForm {
     email: string;
     password: string;
@@ -45,4 +48,40 @@ export interface IDistrict {
 export interface IWard {
     id?: number,
     name?: string
+}
+
+export interface ICreateClassForm {
+    requiredClassId: number,
+    salary: number,
+    studentId: number,
+}
+
+export interface ICreateRequiredClassForm {
+    grade: number,
+    subject: string,
+    minSalary: number,
+    maxSalary: number,
+    province: number,
+    district: number,
+    ward: number,
+}
+
+export interface IUpdateRequiredClassForm {
+    grade?: number,
+    subject?: string,
+    minSalary?: number,
+    maxSalary?: number,
+    province?: number,
+    district?: number,
+    ward?: number,
+}
+
+export interface IGetListQuery {
+    pagination?: IPagination,
+
+}
+
+export interface IPagination {
+    limit?: number,
+    page?: number,
 }

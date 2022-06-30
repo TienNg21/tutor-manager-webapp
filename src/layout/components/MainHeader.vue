@@ -29,14 +29,18 @@
                                     }}</el-button>
                                 </el-dropdown-item>
                                 <el-dropdown-item>
-                                    <el-button @click="logout">{{
-                                        $t('home.class')
-                                    }}</el-button>
+                                    <el-button
+                                        @click="this.$router.push('/account/class')"
+                                        >{{ $t('home.class') }}</el-button
+                                    >
                                 </el-dropdown-item>
                                 <el-dropdown-item>
-                                    <el-button @click="logout">{{
-                                        $t('home.requiredClass')
-                                    }}</el-button>
+                                    <el-button
+                                        @click="
+                                            this.$router.push('/account/required-class')
+                                        "
+                                        >{{ $t('home.requiredClass') }}</el-button
+                                    >
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <el-button plain @click="logout">Logout</el-button>

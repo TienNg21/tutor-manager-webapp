@@ -5,7 +5,10 @@ import LoginPage from '@/pages/login/pages/LoginPage.vue';
 import RegisterPage from '@/pages/register/pages/RegisterPage.vue';
 import SearchPage from '@/pages/search/pages/SearchPage.vue'
 import AccountPage from '@/pages/account/pages/AccountPage.vue'
-import VerifyPage from '@/pages/verify/pages/VerifyPage.vue'
+import VerifyPage from '@/pages/verify/pages/VerifyPage.vue';
+import AccountInfo from '@/pages/account/components/account/AccountInfo.vue'
+import RequiedClass from '@/pages/account/components/required-class/RequiredClass.vue'
+import ClassList from '@/pages/account/components/class/ClassList.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -31,6 +34,17 @@ const routes: Array<RouteRecordRaw> = [
       path: '/account',
       name: 'AccountPage',
       component: AccountPage,
+      children: [{
+        path: '',
+        component: AccountInfo,
+      }, {
+        path: 'required-class',
+        component: RequiedClass,
+      }, {
+        path: 'class',
+        name: 'ClassList',
+        component: ClassList,
+      }],
     }, {
       path: '/verify/:id/:uniqueString',
       name: 'VerifyPage',
