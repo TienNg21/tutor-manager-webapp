@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ICreateClassForm } from '../interfaces';
 
 const axiosClient = axios.create({
-    baseURL: process.env.VUE_APP_API_URL,
+    baseURL: process.env.VUE_APP_BE_URL,
 });
 
 export async function getClasses() {

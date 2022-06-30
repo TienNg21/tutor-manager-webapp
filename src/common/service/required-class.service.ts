@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ICreateClassForm, ICreateRequiredClassForm, IGetListQuery, IUpdateRequiredClassForm } from '../interfaces';
 
 const axiosClient = axios.create({
-    baseURL: process.env.VUE_APP_API_URL,
+    baseURL: process.env.VUE_APP_BE_URL,
 });
 
 export async function getRequiredClasses(query: IGetListQuery) {
